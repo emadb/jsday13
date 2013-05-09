@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="css/custom.css">
+        <script src="libs/jquery-2.0.0.js"></script>
+        <script src="libs/bootstrap.js"></script>
+        <script src="libs/knockout-2.2.1.js"></script>
+    </head>
+    <body>
+        <div id="root" class="container">
+            <div class="row">
+                <div class="span4">
+                    <label>Input your name:</label>
+                    <input type="text" data-bind="value: username" />
+                </div>
+                <div class="span8">
+                    <h2 data-bind="text: computedMessage"></h2>
+                </div>
+            </div>
+        </div>
+        
+    </body>
+    <script type="text/javascript">
+        function ViewModel() {
+            var self = this;
+            self.username = ko.observable('');
+            self.computedMessage =  ko.computed(function(){
+                return 'Welcome, ' + self.username(); 
+            });
+        };
+        ko.applyBindings(new ViewModel());
+    </script>
+</html>

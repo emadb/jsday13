@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="css/custom.css">
+        <script src="libs/jquery-2.0.0.js"></script>
+        <script src="libs/bootstrap.js"></script>
+        <script src="libs/moment.js"></script>
+        <script src="libs/knockout-2.2.1.js"></script>
+    </head>
+    <body>
+        <div id="root" class="container">
+            <input type="text" data-bind="dateString: currentDate">
+            <div data-bind="text: currentDate"></div>
+        </div> 
+    </body>
+    <script type="text/javascript">
+        var DATE_FORMAT = "DD-MM-YYYY";
+        ko.bindingHandlers.dateString = {
+            update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+                var date = ko.utils.unwrapObservable(valueAccessor());
+                $(element).val(moment(date).format(DATE_FORMAT));
+            },
+            
+            init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+                $(element).change(function(){
+                    var date = moment($(element).val(), DATE_FORMAT);
+                    viewModel.currentDate(date.toDate());
+                });
+            }
+        }
+        
+        function ViewModel(){
+            var self = this;
+            self.currentDate = ko.observable(new Date());
+        }
+        var vm = new ViewModel();
+        ko.applyBindings(vm);
+        
+        
+    </script>
+</html>

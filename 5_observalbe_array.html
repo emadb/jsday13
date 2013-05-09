@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="css/custom.css">
+        <script src="libs/jquery-2.0.0.js"></script>
+        <script src="libs/bootstrap.js"></script>
+        <script src="libs/knockout-2.2.1.js"></script>
+    </head>
+    <body>
+        <div id="root" class="container">
+            <div class="row">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Surname</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: characters">
+                        <tr>
+                            <td><a href="#" data-bind="text: name, click: $parent.select"></a></td>
+                            <td data-bind="text: surname"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <button class="btn btn-primary" data-bind="click: addNew">Add new</button>
+            </div>
+        </div>
+        
+    </body>
+    <script type="text/javascript">
+        function MonkeyIsland(characters) {
+            var self = this;
+            self.characters = ko.observableArray(characters);
+            self.addNew = function(){
+                var length = self.characters().length;
+                self.characters.push({name: 'pirate-' + length, surname: 'pirate-' + length });
+            }
+        };
+        
+        var vm = new MonkeyIsland([
+            {name: 'Guybrush', surname: 'Threepwood'},
+            {name: 'Elaine', surname: 'Marley'},
+            {name: 'Pirate', surname: 'TLeChuck'}
+        ]);
+        
+        ko.applyBindings(vm);
+    </script>
+</html>

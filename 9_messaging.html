@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="css/custom.css">
+        <script src="libs/jquery-2.0.0.js"></script>
+        <script src="libs/bootstrap.js"></script>
+        <script src="libs/knockout-2.2.1.js"></script>
+    </head>
+    <body>
+        <div id="root" class="container">
+            <div class="row">
+                <div class="span12" id="header" >
+                    <h3 data-bind="text: headerText"></h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span6" id="list">
+                    <fieldset>
+                        <legend>list</legend>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Surname</th>
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach: items">
+                                <tr>
+                                    <td><a href="#" data-bind="text: name, click: $parent.select"></a></td>
+                                    <td data-bind="text: surname"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </fieldset>
+                </div>
+                <div class="span6" id="detail">
+                    <fieldset>
+                        <legend>details</legend>
+                        <form class="form-horizontal">
+                            <div class="control-group">
+                                <label class="control-label" for="inputEmail">Name</label>
+                                <div class="controls">
+                                    <input type="text" data-bind="value: name">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="inputEmail">Surname</label>
+                                <div class="controls">
+                                    <input type="text" data-bind="value: surname">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <input type="button" data-bind="click:save" value="Save" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </form>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        
+    </body>
+    <script type="text/javascript">
+        var postbox = new ko.subscribable();
+        
+        function DetailViewModel(id, name, surname) {
+            var self = this;
+            self.id = ko.observable(id);
+            self.name = ko.observable(name);
+            self.surname = ko.observable(surname);
+            self.save = function(){
+                // Should save and notify...
+            }
+            
+            postbox.subscribe(function(item) {
+                self.id(item.id);
+                self.name(item.name);
+                self.surname(item.surname);
+            }, self, 'itemSelected');
+        }
+        
+        function ListViewModel(items){
+            var self = this;
+            self.items = ko.observableArray(items);
+            self.select = function(item){
+                postbox.notifySubscribers(item, 'itemSelected');
+            }
+        }
+        
+        function HeaderViewModel(){
+            var self = this;
+            self.headerText = ko.observable('Currently selected item: none' );
+            postbox.subscribe(function(item) {
+                self.headerText('Currently selected item: ' + item.name );
+            }, self, 'itemSelected');   
+        }
+        
+        var list = new ListViewModel([
+            {id:1, name:'Guybrush', surname:'Threepwood'},
+            {id:2, name:'Elaine', surname:'Marley'},
+            {id:2, name:'Pirate', surname:'LeChuck'}
+        ]);
+        
+        var detail = new DetailViewModel();
+        var header = new HeaderViewModel();
+        
+        
+        ko.applyBindings(header, $('#header')[0]);
+        ko.applyBindings(list, $('#list')[0]);
+        ko.applyBindings(detail, $('#detail')[0]);
+        
+    </script>
+</html>
