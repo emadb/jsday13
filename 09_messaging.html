@@ -63,7 +63,7 @@
         
     </body>
     <script type="text/javascript">
-        var postbox = new ko.subscribable();
+        var broker = new ko.subscribable();
         
         function DetailViewModel(id, name, surname) {
             var self = this;
@@ -74,7 +74,7 @@
                 // Should save and notify...
             }
             
-            postbox.subscribe(function(item) {
+            broker.subscribe(function(item) {
                 self.id(item.id);
                 self.name(item.name);
                 self.surname(item.surname);
@@ -85,14 +85,14 @@
             var self = this;
             self.items = ko.observableArray(items);
             self.select = function(item){
-                postbox.notifySubscribers(item, 'itemSelected');
+                broker.notifySubscribers(item, 'itemSelected');
             }
         }
         
         function HeaderViewModel(){
             var self = this;
             self.headerText = ko.observable('Currently selected item: none' );
-            postbox.subscribe(function(item) {
+            broker.subscribe(function(item) {
                 self.headerText('Currently selected item: ' + item.name );
             }, self, 'itemSelected');   
         }
