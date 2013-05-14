@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="css/custom.css">
+        <script src="libs/jquery-2.0.0.js"></script>
+        <script src="libs/bootstrap.js"></script>
+        <script src="libs/moment.js"></script>
+        <script src="libs/knockout-2.2.1.js"></script>
+    </head>
+    <body>
+        <div id="root" class="container">
+            <div class="row">
+                <input type="text" data-bind="value: message">
+            </div>
+            <div class="row" style="text-align:center">
+                <h2 data-bind="fadeIn: message"></div>
+            </div>
+        </div> 
+    </body>
+    <script type="text/javascript">
+        
+        ko.bindingHandlers.fadeIn = {
+            update: function(element, valueAccessor) {
+                $(element).animate({fontSize: 60});
+                ko.bindingHandlers.text.update(element, valueAccessor);
+                $(element).animate({fontSize: 14});
+            } 
+        }
+        
+        function ViewModel(){
+            var self = this;
+            self.message = ko.observable('custom binding is cool');
+        }
+        var vm = new ViewModel();
+        ko.applyBindings(vm);
+        
+        
+    </script>
+</html>
