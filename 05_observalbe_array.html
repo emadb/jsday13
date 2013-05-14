@@ -38,7 +38,10 @@
             self.addNew = function(){
                 var length = self.characters().length;
                 self.characters.push({name: 'pirate-' + length, surname: 'pirate-' + length });
-            }
+            };
+			self.select = function(character){
+				alert('You selected ' + character.name + ' ' + character.surname);
+			}
         };
         
         var vm = new MonkeyIsland([
